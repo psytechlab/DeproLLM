@@ -1,0 +1,6 @@
+isanlp @ git+https://github.com/IINemo/isanlp.git@2a102e59f9718acc7fe259dd8d83c66d5da39794
+pymystem3
+razdel
+scikit-learn
+joblib
+numpy
