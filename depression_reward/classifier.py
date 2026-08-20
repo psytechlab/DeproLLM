@@ -85,7 +85,7 @@ def self_check(model, model_dir: Path, tol: float = SELF_CHECK_TOL) -> None:
 
 
 class StyleScorer:
-    """Загрузка классификатора с fallback-пересборкой и обязательной сверкой.
+    """Сборка классификатора из исходных весов и обязательная сверка.
 
     decision_function: выше = «депрессивнее». predict_proba у модели нет.
     """
@@ -95,17 +95,9 @@ class StyleScorer:
         self.model = self._load()
 
     def _load(self):
-        import joblib
-        try:
-            model = joblib.load(self.model_dir / 'model_repacked.joblib')
-            self_check(model, self.model_dir)
-            return model
-        except Exception:
-            # joblib другой версии sklearn мог не загрузиться или дать дрейф —
-            # пересобираем из голых весов (источник истины)
-            model = build_model_from_weights(self.model_dir)
-            self_check(model, self.model_dir)
-            return model
+        model = build_model_from_weights(self.model_dir)
+        self_check(model, self.model_dir)
+        return model
 
     def raw_scores(self, vectors: np.ndarray) -> np.ndarray:
         vectors = np.asarray(vectors, dtype=np.float64)

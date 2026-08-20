@@ -358,6 +358,6 @@ nb['metadata'] = {
     'kernelspec': {'display_name': 'Python 3', 'language': 'python', 'name': 'python3'},
     'language_info': {'name': 'python', 'version': '3.12'},
 }
-out = '/home/alexdtat/repos/isanlp-titanis-master/isanlp-titanis/grpo_report.ipynb'
+out = str(Path(__file__).with_name('grpo_report.ipynb'))
 nbf.write(nb, out)
 print('written', out, len(cells), 'cells')
