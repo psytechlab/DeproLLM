@@ -102,9 +102,27 @@ python -m depression_reward.validation generated.jsonl --field completion
 - `selfcheck.py` — 9 проверок; `validation.py` — маркеры; `sample_texts.py` —
   мок-эссе.
 
-## Перенос в Colab
+## Закрытый runtime для Kaggle
 
 ```bash
-zip -r depression_reward.zip depression_reward   # из корня репозитория
-# в Colab: разархивировать, pip install -r ..., python -m depression_reward.selfcheck
+python make_kaggle_runtime.py build v3
+python make_kaggle_runtime.py pin \
+  downloads/kaggle/deprollm-depression-reward-runtime-v3
+python make_kaggle_runtime.py check \
+  downloads/kaggle/deprollm-depression-reward-runtime-v3
 ```
+
+Загрузите созданный `deprollm-depression-reward-runtime-v3.zip` как новую
+версию **приватного** Kaggle Dataset и подключите его к notebook через Input.
+Kaggle распакует upload ZIP в одноимённую папку. Внутренний ZIP намеренно имеет
+имя `depression_reward.payload`, чтобы Kaggle не распаковал его второй раз.
+Notebook рекурсивно найдёт `manifest.json`, сверит закреплённые версию и SHA-256,
+проверит `SHA256SUMS` и только затем распакует payload в
+`/tmp/deprollm_reward_runtime`. Этот путь не попадает в сохраняемые Kaggle
+outputs; notebook явно настраивает `PYTHONPATH` и пути к requirements/prompts.
+
+Упаковщик не перезаписывает существующие версии и отказывается собирать runtime
+из незакоммиченных изменений кода или данных `depression_reward/`. Изменение
+README не влияет на runtime и не блокирует сборку. Это связывает приватный
+артефакт с конкретным Git-коммитом и не даёт случайно переиспользовать имя
+старой версии для новых весов или кода.
