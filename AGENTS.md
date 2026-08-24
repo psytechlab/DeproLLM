@@ -61,3 +61,16 @@ Kaggle Dataset. Изменение только `depression_reward/README.md` н
 
 Локально использовать `.venv/bin/python`, если окружение присутствует. GPU-
 обучение выполнять в Kaggle; локальные проверки reward работают на CPU.
+
+Перед отправкой notebook в Kaggle выполнить:
+
+```bash
+python3 check_grpo_notebook.py
+```
+
+В Git `SMOKE_RUN` всегда должен оставаться `False`. Для технического smoke run
+создавать временную копию notebook с `SMOKE_RUN = True` и не коммитить её.
+Полный 300-шаговый прогон начинать только после успешного двухшагового smoke.
+При запуске через Kaggle CLI явно указывать
+`--accelerator NvidiaTeslaT4`: обычный `enable_gpu` может выдать P100, который
+несовместим с текущим CUDA/Triton-окружением notebook.
