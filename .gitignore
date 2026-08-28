@@ -201,6 +201,18 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
+# DeproLLM generated training and transport artifacts
+depression_reward.zip
+grpo_artifacts.zip
+grpo_results*/
+kaggle_output*/
+results.zip
+**/checkpoint-*/
+**/optimizer.pt
+**/scheduler.pt
+**/rng_state*.pth
+**/grpo_depression_lora/
+
 # Marimo
 marimo/_static/
 marimo/_lsp/

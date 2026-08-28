@@ -1,0 +1,32 @@
+{
+  "scaler": {
+    "with_mean": true,
+    "with_std": true,
+    "n_samples_seen": 632
+  },
+  "pca": {
+    "n_components": 46,
+    "whiten": false,
+    "svd_solver": "auto",
+    "noise_variance": 0.12799772188877462
+  },
+  "svc": {
+    "C": 1000,
+    "kernel": "rbf",
+    "degree": 3,
+    "gamma_param": "scale",
+    "gamma_computed": 0.01498916463448216,
+    "coef0": 0.0,
+    "tol": 0.001,
+    "shrinking": true,
+    "break_ties": false,
+    "decision_function_shape": "ovr",
+    "class_weight_param": null,
+    "sparse": false,
+    "shape_fit": [
+      892,
+      46
+    ],
+    "fit_status": 0
+  }
+}
