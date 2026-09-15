@@ -1,0 +1,18 @@
+{
+  "reference": {
+    "kernel": "alexdtat/deprollm-grpo-reference-full",
+    "run_id": "20260824T051600Z",
+    "training_seed": 3407,
+    "data_seed": 3407,
+    "training_runtime_seconds": 20553.8452,
+    "archive_sha256": "3050813165cfb3e3bba503d3549348cd29cde99ae72d157875e598437d1e5515"
+  },
+  "repeat": {
+    "kernel": "alexdtat/deprollm-grpo-repeat-seed-4407-full",
+    "run_id": "20260904T101042Z",
+    "training_seed": 4407,
+    "data_seed": 4407,
+    "training_runtime_seconds": 19326.167,
+    "archive_sha256": "8382a4026f7c23ff75b2d231b2a1798b6288ce4f7d8c613cd5a1ce6eaaac11f7"
+  }
+}
