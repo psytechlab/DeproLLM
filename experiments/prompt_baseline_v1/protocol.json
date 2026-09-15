@@ -1,0 +1,74 @@
+{
+  "experiment_id": "prompt-baseline-v1",
+  "model": "unsloth/Qwen3-4B-Instruct-2507",
+  "revision": "992063681dc2f7de4ee976110199552935cad284",
+  "seeds": [3407, 3408, 3409],
+  "sampling": {"temperature": 0.8, "top_p": 0.95, "top_k": -1, "max_tokens": 1300, "repetition_penalty": 1.0},
+  "batch_size": 4,
+  "environment": {
+    "vllm": "0.9.2",
+    "transformers": "4.53.2",
+    "triton": "3.2.0",
+    "numpy": "2.0.2",
+    "peft": "0.20.0"
+  },
+  "instructions": {
+    "neutral": "Напишите эссе объёмом 300–500 слов на тему: «{topic}».",
+    "role": "Напишите эссе объёмом 300–500 слов на тему: «{topic}». Пишите от лица вымышленного человека с клинически диагностированной депрессией.",
+    "constrained": "Напишите эссе объёмом 300–500 слов на тему: «{topic}». Пишите от лица вымышленного человека с клинически диагностированной депрессией. Содержание должно оставаться нейтральным и соответствовать теме. Передайте особенности автора только через манеру письма. Не упоминайте диагноз, симптомы, лечение, печаль, страдание или безнадёжность. Не объясняйте, как вы выполняете инструкцию."
+  },
+  "conditions": [
+    {"id": "base_neutral", "adapter": null, "instruction": "neutral"},
+    {"id": "base_role", "adapter": null, "instruction": "role"},
+    {"id": "base_constrained", "adapter": null, "instruction": "constrained"},
+    {"id": "grpo_3407_neutral", "adapter": "reference", "instruction": "neutral"},
+    {"id": "grpo_4407_neutral", "adapter": "repeat", "instruction": "neutral"}
+  ],
+  "old_topics": [
+    "Дело, за которым я забываю о времени",
+    "Предмет, который я полюбил не сразу",
+    "Чему меня научила первая работа",
+    "Моё увлечение и как оно появилось",
+    "Проект, которым я занимаюсь сейчас",
+    "Как я учусь новому",
+    "Навык, которым я горжусь",
+    "Человек, у которого я хотел бы учиться",
+    "Что мне даёт спорт или движение",
+    "Идея, которую я давно хочу воплотить"
+  ],
+  "new_topics": [
+    "Как устроить удобную общественную библиотеку",
+    "Для чего нужны указатели на городских улицах",
+    "Как хранить и упорядочивать цифровые фотографии",
+    "Зачем ремонтировать бытовые вещи",
+    "Как организовать велосипедную парковку",
+    "Чем интересен местный продуктовый рынок",
+    "Как объяснить правила настольной игры",
+    "Как выбрать упаковку для повторного использования",
+    "Как устроить небольшую выставку предметов",
+    "Как наблюдать за погодой и вести записи"
+  ],
+  "pilot_topics": ["Как накрыть стол для чаепития", "Как составить каталог кухонной посуды"],
+  "runtime": {
+    "dataset": "alexdtat/deprollm-depression-reward-runtime",
+    "artifact_name": "deprollm-depression-reward-runtime",
+    "artifact_version": "v2",
+    "sha256": "b73f9946b2b87fec68e19d93300e54496ddeedd3bfe3c19c436f60d56df7f77b"
+  },
+  "adapters": {
+    "reference": {
+      "kernel": "alexdtat/deprollm-grpo-reference-full",
+      "run_id": "20260824T051600Z",
+      "archive_sha256": "3050813165cfb3e3bba503d3549348cd29cde99ae72d157875e598437d1e5515",
+      "weights_sha256": "8cd280c6e688bb910c80c1fe926f8429b4af534840a5c600cc59f3dbbe7907bc",
+      "config_sha256": "d3845cb2d27d3db26635b6f0522ac8f7e40969e880f9646a21febbdd62393dd7"
+    },
+    "repeat": {
+      "kernel": "alexdtat/deprollm-grpo-repeat-seed-4407-full",
+      "run_id": "20260904T101042Z",
+      "archive_sha256": "8382a4026f7c23ff75b2d231b2a1798b6288ce4f7d8c613cd5a1ce6eaaac11f7",
+      "weights_sha256": "c43cbd53e70ec6101a68f35781c5116139f532c07211f8a1bc4a018f2d47773b",
+      "config_sha256": "ddd3ef2d59617cb9110335e0084f9cca49cbb89023724182505b55a1ee113806"
+    }
+  }
+}

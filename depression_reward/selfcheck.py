@@ -7,7 +7,7 @@ import sys
 import time
 
 from . import sample_texts as st
-from .classifier import StyleScorer
+from .classifier import REFERENCE_SCORES, StyleScorer
 from .config import RewardConfig
 from .feature_names import FEATURE_NAMES
 from .features import FeaturePipeline
@@ -28,10 +28,13 @@ def check(name, condition, detail=''):
 def main():
     timing = '--timing' in sys.argv
 
-    # 1. модель воспроизводит эталонные скоры (self-check зашит в init StyleScorer)
+    # 1. модель воспроизводит эталонные скоры на сохранённых 73-мерных векторах
+    # (численная сверка зашита в init StyleScorer)
     try:
         scorer = StyleScorer()
-        check('model-reference', True)
+        check('model-reference-vectors', True,
+              ' '.join(f'{name}={score:.10f}'
+                       for name, score in REFERENCE_SCORES.items()))
     except Exception as e:
         check('model-reference', False, str(e))
         print('дальнейшие проверки невозможны'); sys.exit(1)
@@ -44,14 +47,15 @@ def main():
     check('feature-names', names == FEATURE_NAMES and len(res.vector) == 73,
           f'{len(names)} имён')
 
-    # 3. депрессивный мок обгоняет нейтральный по raw-скору
+    # 3. демонстрационный текст сдвинут выше нейтрального по raw-скору
     t0 = time.perf_counter()
     depr_res = pipeline.extract(st.DEPRESSIVE_ESSAY)
     extract_dt = time.perf_counter() - t0
     raw_depr = float(scorer.raw_scores(depr_res.vector)[0])
     raw_norm = float(scorer.raw_scores(res.vector)[0])
-    check('style-ordering', raw_depr - raw_norm > 0.005,
-          f'depr={raw_depr:.4f} norm={raw_norm:.4f} margin={raw_depr - raw_norm:.4f}')
+    check('sample-text-ordering', raw_depr - raw_norm > 0.005,
+          f'sample_depr={raw_depr:.4f} sample_norm={raw_norm:.4f} '
+          f'margin={raw_depr - raw_norm:.4f}')
     if timing:
         print(f'    извлечение признаков: {extract_dt * 1000:.0f} мс/текст')
 

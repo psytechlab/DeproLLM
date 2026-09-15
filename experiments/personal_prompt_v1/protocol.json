@@ -1,0 +1,43 @@
+{
+  "experiment_id": "personal-prompt-v1",
+  "status": "design_frozen_before_generation",
+  "design_date": "2026-09-12",
+  "source_protocol": "experiments/topic_framing_v1/protocol.json",
+  "source_protocol_sha256": "69e2bca8e17cd6bead7a68f3b95da6ab78078fb40e8eca0a645f1d384eb3b611",
+  "inherit_exact_fields": ["model", "revision", "seeds", "sampling", "batch_size", "environment", "engine", "topics", "pilot_topics", "pilot_seeds", "runtime", "adapters"],
+  "prompt_prefix": "Напишите на русском языке эссе-рассуждение объёмом 300–500 слов на тему: «{topic}». Рассмотрите тему через собственный опыт и личные наблюдения, от первого лица единственного числа.",
+  "prompt_ending": "Напишите связный текст, без списков и пошаговых инструкций. Верните только эссе.",
+  "prompt_join_rule": "Join nonempty prefix.format(topic=topic), instruction, ending with exactly one ASCII space; no trailing whitespace.",
+  "instructions": {
+    "neutral": "",
+    "role": "Пишите от лица вымышленного человека с клинически диагностированной депрессией.",
+    "constrained": "Пишите от лица вымышленного человека с клинически диагностированной депрессией. Содержание должно оставаться нейтральным и соответствовать теме. Передайте особенности автора только через манеру письма. Не упоминайте диагноз, симптомы, лечение, печаль, страдание или безнадёжность. Не объясняйте, как вы выполняете инструкцию."
+  },
+  "conditions": [
+    {"id": "base_neutral", "adapter": null, "instruction": "neutral"},
+    {"id": "base_role", "adapter": null, "instruction": "role"},
+    {"id": "base_constrained", "adapter": null, "instruction": "constrained"},
+    {"id": "grpo_3407_neutral", "adapter": "reference", "instruction": "neutral"},
+    {"id": "grpo_4407_neutral", "adapter": "repeat", "instruction": "neutral"}
+  ],
+  "request_id_rule": "condition_id + ':' + topic_id + ':' + str(seed)",
+  "request_seed_rule": "seed * 100 + topic_index",
+  "execution_order": ["conditions", "topics", "seeds"],
+  "expected_full_texts": 300,
+  "expected_pilot_texts": 10,
+  "analysis": {
+    "unit": "topic",
+    "primary_score": "feature_score",
+    "primary_contrasts": [["grpo_3407_neutral", "base_constrained"], ["grpo_4407_neutral", "base_constrained"]],
+    "secondary_contrasts": [["base_role", "base_neutral"], ["base_constrained", "base_neutral"], ["grpo_3407_neutral", "base_neutral"], ["grpo_4407_neutral", "base_neutral"], ["grpo_3407_neutral", "base_role"], ["grpo_4407_neutral", "base_role"]],
+    "groups": ["all_equal_group_weight", "old", "new"],
+    "bootstrap_rng": "numpy.random.default_rng",
+    "bootstrap_seed": 20260912,
+    "bootstrap_repetitions": 10000,
+    "bootstrap_ci_percentiles": [2.5, 97.5],
+    "features_of_interest": ["pro_1p_sing_rate", "verbs_past_tense_rate", "mean_sentence_len", "trager_coef", "logical_coh_coef", "negation_rate", "sentiment_rate"],
+    "optional_review_topic_indices": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18],
+    "optional_review_generation_seed": 3407,
+    "optional_review_shuffle_seed": 20260914
+  }
+}

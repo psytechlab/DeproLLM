@@ -1,0 +1,85 @@
+{
+  "experiment_id": "strong-model-prompt-v1",
+  "status": "amended_before_retained_generation",
+  "design_date": "2026-09-12",
+  "amendment_date": "2026-09-13",
+  "amendment": "GLM-5.3 replaced by GLM-5.3-Flash after provider concurrency failures and one rejected malformed Flash pilot; no generated text was retained and no other scientific condition changed",
+  "source_personal_protocol": "experiments/personal_prompt_v1/protocol.json",
+  "source_personal_protocol_sha256": "0dd9381d4eaa87e97e74d3f2f7842ef18a407765c1b594b7a467e9885edb4533",
+  "source_topic_protocol": "experiments/topic_framing_v1/protocol.json",
+  "source_topic_protocol_sha256": "69e2bca8e17cd6bead7a68f3b95da6ab78078fb40e8eca0a645f1d384eb3b611",
+  "generation_surface": {
+    "provider": "Z.ai",
+    "application": "ZCode Agent",
+    "connection_mode": "Start Plan",
+    "model": "GLM-5.3-Flash",
+    "reasoning_effort": "high",
+    "sampling_seed_control": "unavailable",
+    "temperature_control": "unavailable",
+    "network_tools": false,
+    "subagents": false,
+    "workspace_scope": "one isolated batch directory"
+  },
+  "conditions": [
+    {"id": "glm53_flash_neutral", "instruction": "neutral"},
+    {"id": "glm53_flash_role", "instruction": "role"},
+    {"id": "glm53_flash_constrained", "instruction": "constrained"}
+  ],
+  "replicates": [0, 1, 2],
+  "pilot_replicates": [0],
+  "request_id_rule": "condition_id + ':' + topic_id + ':r' + str(replicate)",
+  "expected_full_texts": 180,
+  "expected_pilot_texts": 6,
+  "batching": {
+    "pilot": "one batch containing two pilot topics x three conditions x replicate 0",
+    "full": "one fresh ZCode task per condition x replicate; nine batches of twenty topics",
+    "topic_order": "source protocol order",
+    "reuse_pilot_outputs": false
+  },
+  "scoring_reference": {
+    "reward_config_path": "downloads/kaggle/personal-prompt-full-v1/personal_prompt_full/reward_config.json",
+    "reward_config_sha256": "9c48c082ce1bbddbd1e80f500b944510cd7449330c61f815d0528d68d4932d61",
+    "qwen_scored_path": "downloads/kaggle/personal-prompt-full-v1/personal_prompt_full/scored.jsonl",
+    "qwen_scored_sha256": "14ca2b7a4966a5fe0a9ffeeee061545f5ac65123660eda270e9b891f23c56fed",
+    "qwen_run_manifest_sha256": "e7aee3e1aa38e97eccb3f23ba337f054b371b008de2fc9fd7c82645ce04543bf"
+  },
+  "analysis": {
+    "unit": "topic",
+    "primary_score": "decision_function",
+    "primary_within_model": [["glm53_flash_constrained", "glm53_flash_neutral"]],
+    "secondary_within_model": [
+      ["glm53_flash_role", "glm53_flash_neutral"],
+      ["glm53_flash_constrained", "glm53_flash_role"]
+    ],
+    "external_descriptive": [
+      ["glm53_flash_constrained", "base_constrained"],
+      ["glm53_flash_constrained", "grpo_3407_neutral"],
+      ["glm53_flash_constrained", "grpo_4407_neutral"],
+      ["glm53_flash_neutral", "base_neutral"],
+      ["glm53_flash_role", "base_role"]
+    ],
+    "groups": ["all_equal_group_weight", "old", "new"],
+    "bootstrap_seed": 20260915,
+    "bootstrap_repetitions": 10000,
+    "bootstrap_ci_percentiles": [2.5, 97.5],
+    "features_of_interest": [
+      "pro_1p_sing_rate",
+      "verbs_past_tense_rate",
+      "mean_sentence_len",
+      "trager_coef",
+      "logical_coh_coef",
+      "negation_rate",
+      "sentiment_rate"
+    ],
+    "optional_review_topic_indices": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18],
+    "optional_review_glm_replicate": 0,
+    "optional_review_qwen_seed": 3407,
+    "optional_review_conditions": [
+      "glm53_flash_constrained",
+      "base_constrained",
+      "grpo_3407_neutral",
+      "grpo_4407_neutral"
+    ],
+    "optional_review_shuffle_seed": 20260916
+  }
+}
