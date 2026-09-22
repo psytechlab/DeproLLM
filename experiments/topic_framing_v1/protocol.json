@@ -1,0 +1,89 @@
+{
+  "experiment_id": "topic-framing-v1",
+  "protocol_version": 1,
+  "design_date": "2026-09-12",
+  "status": "design_frozen",
+  "source_protocol": "experiments/prompt_baseline_v1/protocol.json",
+  "source_protocol_sha256": "7f55d01d1d36a5ac9f1128f075d76c0b25cd380e1b9540b8469836c3b67c9df7",
+  "model": "unsloth/Qwen3-4B-Instruct-2507",
+  "revision": "992063681dc2f7de4ee976110199552935cad284",
+  "seeds": [3407, 3408, 3409],
+  "request_seed_rule": "seed * 100 + topic_index; identical across frames and models",
+  "sampling": {"temperature": 0.8, "top_p": 0.95, "top_k": -1, "max_tokens": 1300, "repetition_penalty": 1.0},
+  "batch_size": 4,
+  "environment": {"vllm": "0.9.2", "transformers": "4.53.2", "triton": "3.2.0", "numpy": "2.0.2", "peft": "0.20.0"},
+  "engine": {"dtype": "half", "tensor_parallel_size": 1, "max_model_len": 2048, "gpu_memory_utilization": 0.88, "enable_lora": true, "max_lora_rank": 32, "max_loras": 1, "max_cpu_loras": 2, "max_num_seqs": 4, "enforce_eager": true, "seed": 3407, "generation_config": "vllm", "enable_prefix_caching": false},
+  "conditions": [
+    {"id": "base_neutral", "adapter": null},
+    {"id": "grpo_3407_neutral", "adapter": "reference"},
+    {"id": "grpo_4407_neutral", "adapter": "repeat"}
+  ],
+  "prompt_template": "Напишите на русском языке эссе-рассуждение объёмом 300–500 слов на тему: «{topic}». {frame_instruction} Напишите связный текст, без списков и пошаговых инструкций. Верните только эссе.",
+  "frames": [
+    {"id": "personal", "instruction": "Рассмотрите тему через собственный опыт и личные наблюдения, от первого лица единственного числа."},
+    {"id": "general", "instruction": "Рассмотрите тему через общие наблюдения, без обращения к собственному опыту и без первого лица."}
+  ],
+  "topics": [
+    {"topic_index": 0, "topic_id": "old_00", "group": "old", "source_index": 0, "topic": "Увлечённость делом и ощущение времени"},
+    {"topic_index": 1, "topic_id": "old_01", "group": "old", "source_index": 1, "topic": "Как меняется отношение к учебному предмету"},
+    {"topic_index": 2, "topic_id": "old_02", "group": "old", "source_index": 2, "topic": "Опыт первой работы и его уроки"},
+    {"topic_index": 3, "topic_id": "old_03", "group": "old", "source_index": 3, "topic": "Возникновение и развитие увлечения"},
+    {"topic_index": 4, "topic_id": "old_04", "group": "old", "source_index": 4, "topic": "Работа над текущим проектом"},
+    {"topic_index": 5, "topic_id": "old_05", "group": "old", "source_index": 5, "topic": "Освоение новых знаний"},
+    {"topic_index": 6, "topic_id": "old_06", "group": "old", "source_index": 6, "topic": "Освоенный навык и чувство гордости за него"},
+    {"topic_index": 7, "topic_id": "old_07", "group": "old", "source_index": 7, "topic": "Человек, у которого можно учиться"},
+    {"topic_index": 8, "topic_id": "old_08", "group": "old", "source_index": 8, "topic": "Роль спорта и движения в повседневной жизни"},
+    {"topic_index": 9, "topic_id": "old_09", "group": "old", "source_index": 9, "topic": "Идея, которая давно ждёт воплощения"},
+    {"topic_index": 10, "topic_id": "new_00", "group": "new", "source_index": 0, "topic": "Удобство общественной библиотеки"},
+    {"topic_index": 11, "topic_id": "new_01", "group": "new", "source_index": 1, "topic": "Назначение указателей на городских улицах"},
+    {"topic_index": 12, "topic_id": "new_02", "group": "new", "source_index": 2, "topic": "Хранение и упорядочивание цифровых фотографий"},
+    {"topic_index": 13, "topic_id": "new_03", "group": "new", "source_index": 3, "topic": "Смысл ремонта бытовых вещей"},
+    {"topic_index": 14, "topic_id": "new_04", "group": "new", "source_index": 4, "topic": "Организация велосипедной парковки"},
+    {"topic_index": 15, "topic_id": "new_05", "group": "new", "source_index": 5, "topic": "Особенности местного продуктового рынка"},
+    {"topic_index": 16, "topic_id": "new_06", "group": "new", "source_index": 6, "topic": "Объяснение правил настольной игры"},
+    {"topic_index": 17, "topic_id": "new_07", "group": "new", "source_index": 7, "topic": "Выбор упаковки для повторного использования"},
+    {"topic_index": 18, "topic_id": "new_08", "group": "new", "source_index": 8, "topic": "Организация небольшой выставки предметов"},
+    {"topic_index": 19, "topic_id": "new_09", "group": "new", "source_index": 9, "topic": "Наблюдения за погодой и ведение записей"}
+  ],
+  "pilot_topics": [
+    {"topic_index": 90, "topic_id": "pilot_00", "group": "pilot", "topic": "Подготовка стола к чаепитию"},
+    {"topic_index": 91, "topic_id": "pilot_01", "group": "pilot", "topic": "Составление каталога кухонной посуды"}
+  ],
+  "expected_full_texts": 360,
+  "expected_pilot_texts": 12,
+  "pilot_seeds": [3407],
+  "runtime": {
+    "dataset": "alexdtat/deprollm-depression-reward-runtime",
+    "artifact_name": "deprollm-depression-reward-runtime",
+    "artifact_version": "v2",
+    "sha256": "b73f9946b2b87fec68e19d93300e54496ddeedd3bfe3c19c436f60d56df7f77b"
+  },
+  "adapters": {
+    "reference": {
+      "kernel": "alexdtat/deprollm-grpo-reference-full",
+      "run_id": "20260824T051600Z",
+      "archive_sha256": "3050813165cfb3e3bba503d3549348cd29cde99ae72d157875e598437d1e5515",
+      "weights_sha256": "8cd280c6e688bb910c80c1fe926f8429b4af534840a5c600cc59f3dbbe7907bc",
+      "config_sha256": "d3845cb2d27d3db26635b6f0522ac8f7e40969e880f9646a21febbdd62393dd7"
+    },
+    "repeat": {
+      "kernel": "alexdtat/deprollm-grpo-repeat-seed-4407-full",
+      "run_id": "20260904T101042Z",
+      "archive_sha256": "8382a4026f7c23ff75b2d231b2a1798b6288ce4f7d8c613cd5a1ce6eaaac11f7",
+      "weights_sha256": "c43cbd53e70ec6101a68f35781c5116139f532c07211f8a1bc4a018f2d47773b",
+      "config_sha256": "ddd3ef2d59617cb9110335e0084f9cca49cbb89023724182505b55a1ee113806"
+    }
+  },
+  "analysis": {
+    "primary_score": "feature_score",
+    "unit": "topic",
+    "bootstrap_rng": "numpy.random.default_rng",
+    "bootstrap_seed": 20260912,
+    "bootstrap_repetitions": 10000,
+    "bootstrap_ci_percentiles": [2.5, 97.5],
+    "blind_review_topic_indices": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18],
+    "blind_review_generation_seed": 3407,
+    "blind_review_shuffle_seed": 20260913,
+    "features_of_interest": ["pro_1p_sing_rate", "verbs_past_tense_rate", "mean_sentence_len", "trager_coef", "logical_coh_coef", "negation_rate", "sentiment_rate"]
+  }
+}

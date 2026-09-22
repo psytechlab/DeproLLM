@@ -14,9 +14,9 @@
   или эти файлы без отдельного разрешения правообладателя.
 - Не добавлять результаты обучения, checkpoints, optimizer states, LoRA-веса
   и полные Kaggle outputs без отдельного решения.
-- Автономный `grpo_depression.ipynb` содержит скрытую base64-копию
-  `depression_reward.zip`; это намеренный транспортный дубль только для запуска
-  одного файла в Kaggle.
+- `grpo_depression.ipynb` загружает runtime из приватного Kaggle Dataset
+  `deprollm-depression-reward-runtime`. Ноутбук закрепляет версию и SHA-256;
+  Dataset нельзя делать публичным.
 
 ## Классификатор и reward
 
@@ -36,12 +36,41 @@
 
 ```bash
 PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python .venv/bin/python -m depression_reward.selfcheck
-.venv/bin/python embed_zip_in_notebook.py
 ```
 
-Вторая команда пересобирает игнорируемый `depression_reward.zip` без кэшей и
-joblib-дубля, затем обновляет встроенную копию в `grpo_depression.ipynb`.
-Перед коммитом убедиться, что ноутбук не содержит outputs и execution counts.
+Новый runtime Dataset собирать только из чистого коммита и под новой версией:
+
+```bash
+.venv/bin/python make_kaggle_runtime.py build v3
+.venv/bin/python make_kaggle_runtime.py pin \
+  downloads/kaggle/deprollm-depression-reward-runtime-v3
+.venv/bin/python make_kaggle_runtime.py check \
+  downloads/kaggle/deprollm-depression-reward-runtime-v3
+```
+
+`build` создаёт игнорируемые каталог и upload ZIP без кэшей, README и
+joblib-дубля. Внутренний ZIP хранится как `depression_reward.payload`, чтобы
+Kaggle не распаковывал его и notebook мог проверить SHA-256 всего runtime.
+`pin` обновляет в notebook ожидаемые версию и SHA-256; `check` проверяет Dataset,
+отсутствие встроенного base64, outputs и execution counts. Существующую версию
+не перезаписывать: создать следующую и загрузить её как новую версию приватного
+Kaggle Dataset. Изменение только `depression_reward/README.md` не требует новой
+версии runtime и не блокирует упаковку. Notebook распаковывает runtime в
+`/tmp/deprollm_reward_runtime`, а не в `/kaggle/working`, чтобы закрытый пакет
+не сохранялся повторно среди Kaggle outputs.
 
 Локально использовать `.venv/bin/python`, если окружение присутствует. GPU-
 обучение выполнять в Kaggle; локальные проверки reward работают на CPU.
+
+Перед отправкой notebook в Kaggle выполнить:
+
+```bash
+python3 check_grpo_notebook.py
+```
+
+В Git `SMOKE_RUN` всегда должен оставаться `False`. Для технического smoke run
+создавать временную копию notebook с `SMOKE_RUN = True` и не коммитить её.
+Полный 300-шаговый прогон начинать только после успешного двухшагового smoke.
+При запуске через Kaggle CLI явно указывать
+`--accelerator NvidiaTeslaT4`: обычный `enable_gpu` может выдать P100, который
+несовместим с текущим CUDA/Triton-окружением notebook.
